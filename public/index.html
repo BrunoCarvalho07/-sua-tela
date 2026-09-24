@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sua Tela</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="dot"></div>
+    <h1>Sua Tela</h1>
+    <span>compartilhamento de tela em tempo real</span>
+  </header>
+
+  <main>
+    <!-- Tela inicial: escolher entre compartilhar ou assistir -->
+    <section class="card" id="setupCard">
+      <div class="tabs">
+        <div class="tab active" data-mode="host">Compartilhar</div>
+        <div class="tab" data-mode="viewer">Assistir</div>
+      </div>
+
+      <div id="hostForm">
+        <label for="hostRoomInput">Nome da sala</label>
+        <input id="hostRoomInput" placeholder="ex: reuniao-time" autocomplete="off" />
+        <button class="primary" id="startHostBtn">Iniciar compartilhamento</button>
+      </div>
+
+      <div id="viewerForm" style="display:none;">
+        <label for="viewerRoomInput">Código da sala</label>
+        <input id="viewerRoomInput" placeholder="digite o código recebido" autocomplete="off" />
+        <button class="primary" id="joinBtn">Entrar na sala</button>
+      </div>
+
+      <div class="msg" id="msg"></div>
+    </section>
+
+    <!-- Tela de sessão ativa (aparece depois que host ou viewer entram numa sala) -->
+    <section class="session" id="sessionView">
+      <div class="toolbar">
+        <div class="status">
+          <span class="badge" id="roleBadge">AO VIVO</span>
+          Sala: <span class="room-code" id="roomCodeLabel"></span>
+        </div>
+        <button class="stop" id="stopBtn">Encerrar</button>
+      </div>
+      <div class="video-wrap">
+        <video id="remoteVideo" autoplay playsinline></video>
+        <button class="fullscreen-btn" id="fullscreenBtn" title="Tela cheia">⛶</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>Conexão direta (WebRTC) entre você e seus amigos — o vídeo não passa pelo servidor.</footer>
+
+  <!-- Cliente Socket.IO, servido pelo próprio backend -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/webrtc.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
