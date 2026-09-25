@@ -9,6 +9,13 @@
 </head>
 <body>
 
+  <!-- Fundo animado: formas suaves flutuando (puro CSS, sem imagens) -->
+  <div class="bg-glow">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+
   <header>
     <div class="dot"></div>
     <h1>Sua Tela</h1>
@@ -49,17 +56,17 @@
       </div>
       <div class="video-wrap">
         <video id="remoteVideo" autoplay playsinline></video>
-        <button class="fullscreen-btn" id="fullscreenBtn" title="Tela cheia">⛶</button>
+        <div class="video-controls">
+          <button class="icon-btn" id="muteBtn" title="Mudo">🔊</button>
+          <input type="range" id="volumeSlider" min="0" max="100" value="100" title="Volume" />
+          <button class="fullscreen-btn" id="fullscreenBtn" title="Tela cheia">⛶</button>
+        </div>
       </div>
     </section>
   </main>
 
   <footer>
     Conexão direta (WebRTC) entre você e seus amigos — o vídeo não passa pelo servidor.
-    <div class="credit">
-      Desenvolvido por
-      <a href="https://www.linkedin.com/in/bruno-carvalho-silvaa/" target="_blank" rel="noopener noreferrer">Bruno Carvalho</a>
-    </div>
   </footer>
 
   <!-- Cliente Socket.IO, servido pelo próprio backend -->

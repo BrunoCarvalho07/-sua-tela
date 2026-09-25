@@ -25,6 +25,8 @@ const roomCodeLabel = document.getElementById("roomCodeLabel");
 const roleBadge = document.getElementById("roleBadge");
 const remoteVideo = document.getElementById("remoteVideo");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
+const muteBtn = document.getElementById("muteBtn");
+const volumeSlider = document.getElementById("volumeSlider");
 
 // ---------- Estado da sessão atual ----------
 let mode = "host";        // aba selecionada antes de entrar numa sala
@@ -199,5 +201,29 @@ fullscreenBtn.onclick = () => {
     document.exitFullscreen();
   } else {
     remoteVideo.requestFullscreen?.();
+  }
+};
+
+// ==========================================================
+// Volume / mudo
+// ==========================================================
+volumeSlider.oninput = () => {
+  const volume = Number(volumeSlider.value) / 100;
+  remoteVideo.volume = volume;
+  remoteVideo.muted = volume === 0;
+  muteBtn.textContent = volume === 0 ? "🔇" : "🔊";
+};
+
+muteBtn.onclick = () => {
+  remoteVideo.muted = !remoteVideo.muted;
+  if (remoteVideo.muted) {
+    muteBtn.textContent = "🔇";
+  } else {
+    muteBtn.textContent = "🔊";
+    // Se o slider estava em 0 quando desmutou, volta pra um volume audível.
+    if (Number(volumeSlider.value) === 0) {
+      volumeSlider.value = 100;
+      remoteVideo.volume = 1;
+    }
   }
 };

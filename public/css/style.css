@@ -30,6 +30,72 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ---------- Fundo animado ---------- */
+
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  animation: float 22s ease-in-out infinite;
+}
+
+.blob-1 {
+  width: 420px;
+  height: 420px;
+  background: var(--green);
+  top: -120px;
+  left: -100px;
+  animation-duration: 26s;
+}
+
+.blob-2 {
+  width: 380px;
+  height: 380px;
+  background: var(--gray-500);
+  bottom: -140px;
+  right: -80px;
+  animation-duration: 30s;
+  animation-delay: -8s;
+}
+
+.blob-3 {
+  width: 300px;
+  height: 300px;
+  background: var(--green-dark);
+  top: 40%;
+  left: 55%;
+  animation-duration: 24s;
+  animation-delay: -14s;
+  opacity: 0.22;
+}
+
+@keyframes float {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(40px, 30px) scale(1.08); }
+  66%  { transform: translate(-30px, 20px) scale(0.95); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob { animation: none; }
+}
+
+header, main, footer {
+  position: relative;
+  z-index: 1;
 }
 
 /* ---------- Cabeçalho ---------- */
@@ -75,12 +141,15 @@ main {
 /* ---------- Card de configuração inicial ---------- */
 
 .card {
-  background: var(--gray-800);
+  background: rgba(31, 41, 55, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border: 1px solid var(--gray-700);
-  border-radius: 16px;
+  border-radius: 18px;
   padding: 32px;
   width: 100%;
   max-width: 420px;
+  box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
 }
 
 .tabs {
@@ -256,17 +325,53 @@ video:fullscreen {
   background: #000;
 }
 
-.fullscreen-btn {
+.video-controls {
   position: absolute;
   bottom: 14px;
   right: 14px;
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  border: 1px solid var(--gray-700);
+  display: flex;
+  align-items: center;
+  gap: 8px;
   background: rgba(17, 24, 39, 0.75);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--gray-700);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
   color: var(--gray-100);
-  font-size: 18px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: .15s;
+}
+
+.icon-btn:hover {
+  background: var(--gray-700);
+}
+
+#volumeSlider {
+  width: 90px;
+  accent-color: var(--green);
+  cursor: pointer;
+}
+
+.fullscreen-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--gray-100);
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -277,7 +382,6 @@ video:fullscreen {
 .fullscreen-btn:hover {
   background: var(--green);
   color: var(--gray-900);
-  border-color: var(--green);
 }
 
 /* ---------- Rodapé ---------- */
@@ -287,22 +391,4 @@ footer {
   padding: 14px;
   font-size: 12px;
   color: var(--gray-700);
-}
-
-footer .credit {
-  margin-top: 6px;
-  color: var(--gray-500);
-}
-
-footer .credit strong {
-  color: var(--gray-100);
-}
-
-footer .credit a {
-  color: var(--green);
-  text-decoration: none;
-}
-
-footer .credit a:hover {
-  text-decoration: underline;
 }
