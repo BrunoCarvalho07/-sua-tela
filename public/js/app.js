@@ -112,9 +112,23 @@ socket.on("room-joined", (roomId) => {
 // ==========================================================
 socket.on("signal", async ({ from, data }) => {
   if (isHost) {
-    // Só tratamos candidatos ICE vindos do espectador; a offer/answer
-    // do lado do host já foi tratada em "viewer-joined".
-    if (data.candidate) await peerConnections[from]?.addIceCandidate(data.candidate);
+    const pc = peerConnections[from];
+    if (!pc) return;
+
+    if (data.sdp) {
+      // Resposta (answer) do espectador à nossa offer — sem isso a
+      // conexão nunca sai do estado "pendente" e o vídeo não chega.
+      await pc.setRemoteDescription(data.sdp);
+    } else if (data.candidate) {
+      // Um candidato pode, raramente, chegar antes da negociação
+      // terminar; ignoramos silenciosamente nesse caso em vez de
+      // travar a sessão inteira.
+      try {
+        await pc.addIceCandidate(data.candidate);
+      } catch (err) {
+        console.warn("Candidato ICE ignorado (fora de ordem):", err);
+      }
+    }
     return;
   }
 
@@ -129,7 +143,11 @@ socket.on("signal", async ({ from, data }) => {
     hostConnection = pc;
     socket.emit("signal", { to: from, data: { sdp: answer } });
   } else if (data.candidate && hostConnection) {
-    await hostConnection.addIceCandidate(data.candidate);
+    try {
+      await hostConnection.addIceCandidate(data.candidate);
+    } catch (err) {
+      console.warn("Candidato ICE ignorado (fora de ordem):", err);
+    }
   }
 });
 
